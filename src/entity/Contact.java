@@ -1,6 +1,11 @@
 package entity;
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -11,12 +16,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * title is text to display for this contact in a list of contacts,
  * such as a nickname or company name.
  */
-@XmlRootElement(name="contact")
+@XmlRootElement(name="contacts")
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity 
+@Table(name="contact")
 public class Contact implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@XmlAttribute
+	@Id 
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String name;
 	private String title;
@@ -105,9 +115,16 @@ public class Contact implements Serializable {
 		// Since title is used to display contacts, don't allow empty title
 		if (! isEmpty( update.getTitle()) ) this.setTitle(update.getTitle()); // empty nickname is ok
 		// other attributes: allow an empty string as a way of deleting an attribute in update (this is hacky)
+		else this.setTitle(" ");
+		
 		if (update.getName() != null ) this.setName(update.getName()); 
+		else this.setName(" ");
+		
 		if (update.getEmail() != null) this.setEmail(update.getEmail());
+		else this.setEmail(" ");
+		
 		if (update.getPhotoUrl() != null) this.setPhotoUrl(update.getPhotoUrl());
+		else this.setPhotoUrl(" ");
 	}
 	
 	/**

@@ -20,6 +20,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
+import contact.service.mem.MemContactDao;
+import contact.service.mem.MemDaoFactory;
+
 import entity.Contact;
 import service.ContactDao;
 import service.DaoFactory;
@@ -44,7 +47,7 @@ public class ContactResource {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getAllContact( @QueryParam("q") String title) {
+	public Response getAllContact( @QueryParam("title") String title) {
 		List<Contact> listContact = new ArrayList<Contact>();
 		
 		if( title == null)
