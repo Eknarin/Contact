@@ -20,37 +20,55 @@ import com.sun.research.ws.wadl.Request;
 
 import entity.JettyMain;
 
+/**
+ * J-Unit test of ContactResource.java
+ * @author Eknarin Thirayothin 5510546239
+ *
+ */
 
 public class WebSericeTest {
 	
-	private static String url; 
 	private static HttpClient client;
 	
+	/*
+	 * Do before the test begin
+	 */
 	@BeforeClass
 	public static void first() throws Exception{
-//		url = JettyMain.startServer(8080);
 		JettyMain.startServer(8080);
 		client = new HttpClient();
 		client.start();
 	}
 	
+	/*
+	 * Do after the test finished
+	 */
 	@AfterClass
 	public static void last() throws Exception {
 		JettyMain.stopServer();
 	}
 	
+	/*
+	 * test Get data in pass case
+	 */
 	@Test
 	public void getPass() throws InterruptedException, ExecutionException, TimeoutException {
 		ContentResponse response = client.GET("http://localhost:8080/contacts/1");
 		assertEquals("200 OK", Status.OK.getStatusCode(), response.getStatus());
 	}
 	
+	/*
+	 * Test Get data in fail case
+	 */
 	@Test
 	public void getFail() throws InterruptedException, ExecutionException, TimeoutException {
 		 ContentResponse response = client.GET("http://localhost:8080/contacts/9999");
 		 assertEquals("404 Not Found", Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}
 	
+	/*
+	 * Test Post data in pass case
+	 */
 	@Test
 	public void postPass() throws InterruptedException, TimeoutException, ExecutionException {
 		StringContentProvider content = new StringContentProvider("<contact id=\"4\">" +
@@ -67,6 +85,9 @@ public class WebSericeTest {
 		assertEquals("201 Created", Status.CREATED.getStatusCode(), response.getStatus());		
 	}
 	
+	/*
+	 * Test Post data in fail case
+	 */
 	@Test
 	public void postFail() throws InterruptedException, TimeoutException, ExecutionException {
 		StringContentProvider content = new StringContentProvider("<contact id=\"1\">" +
@@ -83,6 +104,9 @@ public class WebSericeTest {
 		assertEquals("Conflict", Status.CONFLICT.getStatusCode(), response.getStatus());
 	}
 	
+	/*
+	 * Test Put/Update data in pass case
+	 */
 	@Test
 	public void putPass() throws InterruptedException, TimeoutException, ExecutionException{
 		StringContentProvider content = new StringContentProvider("<contact id=\"1\">" +
@@ -99,6 +123,9 @@ public class WebSericeTest {
 		assertEquals("200 OK", Status.OK.getStatusCode(), response.getStatus());
 	}
 	
+	/*
+	 * Test Put/Update data in fail case
+	 */
 	@Test
 	public void putFail() throws InterruptedException, TimeoutException, ExecutionException {
 		StringContentProvider content = new StringContentProvider("<contact id=\"0\">" +
@@ -115,6 +142,9 @@ public class WebSericeTest {
 		assertEquals("Conflict", Status.CONFLICT.getStatusCode(), response.getStatus());
 	}
 
+	/*
+	 * Test Delete data in pass case
+	 */
 	@Test
 	public void deletePass() throws InterruptedException, TimeoutException, ExecutionException {
 		org.eclipse.jetty.client.api.Request request = client.newRequest("http://localhost:8080/contacts/4");
@@ -124,6 +154,9 @@ public class WebSericeTest {
 		assertEquals("200 OK", Status.OK.getStatusCode(), response.getStatus());
 	}
 	
+	/*
+	 * Test Delete data in fail case
+	 */
 	@Test
 	public void deleteFail() throws InterruptedException, TimeoutException, ExecutionException {
 		org.eclipse.jetty.client.api.Request request = client.newRequest("http://localhost:8080/contacts/6789");
