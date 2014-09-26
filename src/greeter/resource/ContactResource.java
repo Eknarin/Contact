@@ -1,6 +1,7 @@
 package greeter.resource;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
@@ -87,14 +89,21 @@ public class ContactResource {
 	 * @param element
 	 * @param uriInfo
 	 * @return response code
+	 * @throws URISyntaxException 
 	 */
 	@POST
 	@Consumes( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
-	public Response post(JAXBElement<Contact> element, @Context UriInfo uriInfo ) {
-			Contact contact = element.getValue();
+	public Response post(JAXBElement<Contact> element, @Context UriInfo uriInfo ) throws URISyntaxException {
+			
+		Contact contact = element.getValue();
+		if(contactDao.find(contact.getId()) == null){
 			contactDao.save( contact );
 			URI location = uriInfo.getAbsolutePath();
-			return Response.ok(location+"/"+contact.getId()).build();
+			return Response.created(new URI("localhost:8080/contacts/" + contact.getId())).build();
+		}
+		else{
+			return Response.status(Status.CONFLICT).build();
+		}
 	}
 
 	/**
@@ -109,14 +118,15 @@ public class ContactResource {
 	@Consumes( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
 	public Response put(JAXBElement<Contact> element, @Context UriInfo uriInfo, @PathParam("id") long id) {
 		if(contactDao.find(id) == null){
-			return Response.status(Response.Status.NOT_FOUND).build();
+			return Response.status(Response.Status.CONFLICT).build();
 		}
 		else{
 			Contact contact = element.getValue();
 			contact.setId(id);
 			contactDao.update(contact);
 			URI location = uriInfo.getAbsolutePath();
-			return Response.ok(location+"/"+contact.getId()).build();
+//			return Response.ok(location+"/"+contact.getId()).build();
+			return Response.ok().build();
 		}
 	}
 	
@@ -127,8 +137,14 @@ public class ContactResource {
 	@DELETE
 	@Path("{id}")
 	@Consumes( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
-	public void delete(@PathParam("id") long id) {
+	public Response delete(@PathParam("id") long id) {
+		if(contactDao.find(id) != null)	{
 			contactDao.delete(id);
+			return Response.ok().build();
+		}
+		else{
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
 	}
 		
 	
