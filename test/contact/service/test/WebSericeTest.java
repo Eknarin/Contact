@@ -139,7 +139,7 @@ public class WebSericeTest {
 		request.content(content, "application/xml");
 		
 		ContentResponse response = request.send();
-		assertEquals("Conflict", Status.CONFLICT.getStatusCode(), response.getStatus());
+		assertEquals("Not Found", Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}
 
 	/*

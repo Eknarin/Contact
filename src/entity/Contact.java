@@ -1,5 +1,9 @@
 package entity;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +25,42 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity 
 @Table(name="contact")
 public class Contact implements Serializable {
+	
+	
+	private static MessageDigest digester;
+
+    static {
+        try {
+            digester = MessageDigest.getInstance("MD5");
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String crypt(String str) {
+        if (str == null || str.length() == 0) {
+            throw new IllegalArgumentException("String to encript cannot be null or zero length");
+        }
+
+        digester.update(str.getBytes());
+        byte[] hash = digester.digest();
+        StringBuffer hexString = new StringBuffer();
+        for (int i = 0; i < hash.length; i++) {
+            if ((0xff & hash[i]) < 0x10) {
+                hexString.append("0" + Integer.toHexString((0xFF & hash[i])));
+            }
+            else {
+                hexString.append(Integer.toHexString(0xFF & hash[i]));
+            }
+        }
+        return hexString.toString();
+    }
+    
+	public String findHashCode() {
+		String hashcode = crypt(id+"");
+		return hashcode;
+	}
 	
 	private static final long serialVersionUID = 1L;
 

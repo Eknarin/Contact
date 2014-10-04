@@ -98,7 +98,7 @@ public class JettyMain {
 		server.start();
 		
 		System.out.println("Server started.  Press ENTER to stop it.");
-		// swaitingExit();
+		waitingExit();
 	}
 	
 	/*

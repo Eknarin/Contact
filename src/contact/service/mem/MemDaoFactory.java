@@ -1,6 +1,9 @@
- package contact.service.mem;
+package contact.service.mem;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -26,31 +29,42 @@ public class MemDaoFactory extends DaoFactory{
 	private static MemDaoFactory factory;
 	private MemContactDao daoInstance;
 	private ContactList contactlist;
-	
-	public MemDaoFactory() {
+
+	public MemDaoFactory(){
+
 		daoInstance = new MemContactDao();
 		contactlist = new ContactList();
-	//unmarshall	
+		//unmarshall	
 		try{
-			 JAXBContext context = JAXBContext.newInstance(ContactList.class);
-			 Unmarshaller unmarshaller = context.createUnmarshaller();
-			 File file = new File("/tmp/XMLfile.xml");
-			 contactlist = (ContactList)unmarshaller.unmarshal(file);
-			 
-			 for(int i=0; i<contactlist.getContactlist().size(); i++){
-				 daoInstance.save(contactlist.getContactlist().get(i));
-			 }
-			 
-		} catch (JAXBException e){
+			JAXBContext context = JAXBContext.newInstance(ContactList.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			File file = new File("XMLfile.xml");
+
+			if(!file.exists()) {
+				contactlist.setContactlist( new ArrayList<Contact>());
+				JAXBContext context2 = JAXBContext.newInstance(ContactList.class);
+				Marshaller marshaller = context2.createMarshaller();
+				file = new File("XMLfile.xml");
+				marshaller.marshal(contactlist, file);
+			}
+			File file2 = new File("XMLfile.xml");
+			contactlist = (ContactList)unmarshaller.unmarshal(file2);
+
+			for(int i=0; i<contactlist.getContactlist().size(); i++){
+				daoInstance.save(contactlist.getContactlist().get(i));
+			}
+
+		} catch (Exception e){
 			e.printStackTrace();
 		}
 	}
+
 	//singleton
 	public static MemDaoFactory getInstance() {
 		if (factory == null) factory = new MemDaoFactory();
 		return factory;
 	}
-	
+
 	@Override
 	public ContactDao getContactDao() {
 		return daoInstance;
@@ -60,15 +74,15 @@ public class MemDaoFactory extends DaoFactory{
 	public void shutdown() {
 		List<Contact> contacts = daoInstance.findAll();
 		contactlist.setContactlist(contacts);
-		
+
 		try{
-			 JAXBContext context = JAXBContext.newInstance(ContactList.class);
-			 Marshaller marshaller = context.createMarshaller();
-			 File file = new File("/tmp/XMLfile.xml");
-			 marshaller.marshal(contactlist, file);
+			JAXBContext context = JAXBContext.newInstance(ContactList.class);
+			Marshaller marshaller = context.createMarshaller();
+			File file = new File("XMLfile.xml");
+			marshaller.marshal(contactlist, file);
 		} catch (JAXBException e){
 			e.printStackTrace();
 		}
 	}
-	
+
 }
