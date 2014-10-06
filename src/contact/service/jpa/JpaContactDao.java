@@ -35,7 +35,7 @@ public class JpaContactDao implements ContactDao {
 	 */
 	public JpaContactDao(EntityManager em) {
 		this.em = em;
-		createTestContact( );
+//		createTestContact( );
 	}
 	
 	/** add contacts for testing. */
@@ -79,6 +79,7 @@ public class JpaContactDao implements ContactDao {
 	public boolean delete(long id) {
 		em.getTransaction().begin();
 		Contact contact = em.find(Contact.class, id);
+//JIM: missing try-catch and rollback
 		em.remove(contact);
 		em.getTransaction().commit();
 		return true;
@@ -111,7 +112,9 @@ public class JpaContactDao implements ContactDao {
 	public boolean update(Contact update) {
 		em.getTransaction().begin();
 		Contact contact = em.find(Contact.class, update.getId());
+//JIM This is unnecessary. Merge update instead.
 		contact.applyUpdate(update);
+//JIM: missing try-catch and rollback
 		em.merge(contact);
 		em.getTransaction().commit();
 		return true;

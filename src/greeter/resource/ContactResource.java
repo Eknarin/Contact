@@ -1,3 +1,4 @@
+// WRONG PACKAGE. This is Contacts and package should be inside contact.*
 package greeter.resource;
 
 import java.net.URI;
@@ -28,6 +29,8 @@ import contact.service.mem.MemDaoFactory;
 import entity.Contact;
 import service.ContactDao;
 import service.DaoFactory;
+//Javadoc is very poor!
+// You don't even write the comment in the correct order!
 /**
  * 
  * @author Eknarin 5510546239
@@ -56,7 +59,7 @@ public class ContactResource {
 			listContact = contactDao.findAll();
 		else
 			listContact = contactDao.getContactByTitle(title);
-		
+//ERROR You should check if listContact is empty *before* creating GenericEntity.		
 		GenericEntity<List<Contact>> contactEntity = new GenericEntity<List<Contact>>(listContact) {};
 		if(contactEntity == null){
 			return Response.status(Response.Status.NOT_FOUND).build();
@@ -75,6 +78,8 @@ public class ContactResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getContactById(@PathParam("id") long id) {
+//JIM: you ask contactDao to get ALL the contacts twice!
+// That's a big waste of resources.  You should save the first result and test it.
 		if(contactDao.find(id) == null){
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
@@ -98,6 +103,7 @@ public class ContactResource {
 		Contact contact = element.getValue();
 		if(contactDao.find(contact.getId()) == null){
 			contactDao.save( contact );
+//COPY? Same stupid logic as other student.  The URI is wrong. Study the sample code.
 			URI location = uriInfo.getAbsolutePath();
 			return Response.created(new URI("localhost:8080/contacts/" + contact.getId())).build();
 		}
@@ -118,6 +124,7 @@ public class ContactResource {
 	@Consumes( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
 	public Response put(JAXBElement<Contact> element, @Context UriInfo uriInfo, @PathParam("id") long id) {
 		if(contactDao.find(id) == null){
+//ERROR should return NOT_FOUND
 			return Response.status(Response.Status.CONFLICT).build();
 		}
 		else{
@@ -139,6 +146,7 @@ public class ContactResource {
 	@Consumes( { MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON } )
 	public Response delete(@PathParam("id") long id) {
 		if(contactDao.find(id) != null)	{
+//JIM: should check if delete returns true or not.
 			contactDao.delete(id);
 			return Response.ok().build();
 		}

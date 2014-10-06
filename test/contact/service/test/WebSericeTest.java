@@ -53,6 +53,9 @@ public class WebSericeTest {
 	 */
 	@Test
 	public void getPass() throws InterruptedException, ExecutionException, TimeoutException {
+//ERROR:
+// 1. assuming URI is localhost:8080/contacts -- you should get it from server
+// 2. assuming contact id exists
 		ContentResponse response = client.GET("http://localhost:8080/contacts/1");
 		assertEquals("200 OK", Status.OK.getStatusCode(), response.getStatus());
 	}
@@ -80,9 +83,12 @@ public class WebSericeTest {
 		org.eclipse.jetty.client.api.Request request = client.newRequest("http://localhost:8080/contacts");
 		request.method(HttpMethod.POST);
 		request.content(content, "application/xml");
-		
+	
 		ContentResponse response = request.send();
-		assertEquals("201 Created", Status.CREATED.getStatusCode(), response.getStatus());		
+		assertEquals("201 Created", Status.CREATED.getStatusCode(), response.getStatus());
+// Incomplete test.
+// Test header.
+// GET the contact you just created and test content.
 	}
 	
 	/*
@@ -90,6 +96,7 @@ public class WebSericeTest {
 	 */
 	@Test
 	public void postFail() throws InterruptedException, TimeoutException, ExecutionException {
+//ERROR: *assumes* that contact 1 already exists.
 		StringContentProvider content = new StringContentProvider("<contact id=\"1\">" +
 				"<title>title1</title>" +
 				"<name>name1 lastname1</name>" +
@@ -121,6 +128,7 @@ public class WebSericeTest {
 		
 		ContentResponse response = request.send();
 		assertEquals("200 OK", Status.OK.getStatusCode(), response.getStatus());
+//Incomplete: you didn't test if content what actually updated.
 	}
 	
 	/*
