@@ -1,11 +1,11 @@
 package contact.service.mem;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import service.ContactDao;
-
-import entity.Contact;
+import contact.entity.Contact;
+import contact.service.ContactDao;
 
 /**
  * Data access object for saving and retrieving contacts.

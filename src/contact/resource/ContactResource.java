@@ -1,4 +1,5 @@
-package greeter.resource;
+package contact.resource;
+
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,12 +26,9 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
-import contact.service.mem.MemContactDao;
-import contact.service.mem.MemDaoFactory;
-
-import entity.Contact;
-import service.ContactDao;
-import service.DaoFactory;
+import contact.entity.Contact;
+import contact.service.ContactDao;
+import contact.service.DaoFactory;
 /**
  * 
  * @author Eknarin 5510546239
@@ -50,9 +48,9 @@ public class ContactResource {
 	}
 	/**
 	 * get all contacts
-	 * contacts can search by title
+	 * search by contacts title
 	 * @param title to find in contacts
-	 * @return all contacts
+	 * @return a list of contacts
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
@@ -74,9 +72,9 @@ public class ContactResource {
 	}
 
 	/**
-	 * get contact by searching id
+	 * search contact by id
 	 * @param id 
-	 * @return response code
+	 * @return response code which tell us it can find the contact or not
 	 */
 	@GET
 	@Path("{id}")
@@ -97,10 +95,10 @@ public class ContactResource {
 	}
 
 	/**
-	 * create a contact
+	 * create a new contact
 	 * @param element
 	 * @param uriInfo
-	 * @return response code
+	 * @return response code about post successful
 	 * @throws URISyntaxException 
 	 */
 	@POST
@@ -123,7 +121,7 @@ public class ContactResource {
 	 * @param element
 	 * @param uriInfo
 	 * @param id
-	 * @return response code
+	 * @return response code that it can update or not
 	 */
 	@PUT
 	@Path("{id}")

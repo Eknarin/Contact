@@ -1,4 +1,4 @@
-package entity;
+package contact.entity;
 
 import java.util.ArrayList;
 import java.util.List;

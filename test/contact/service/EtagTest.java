@@ -1,9 +1,10 @@
-import static org.junit.Assert.*;
+package contact.service;
+
+
+import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-
-import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
@@ -13,7 +14,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import entity.JettyMain;
+import contact.JettyMain;
+
 
 
 public class EtagTest {
@@ -53,11 +55,11 @@ public class EtagTest {
 	 */
 	@Test
 	public void etagPost() throws InterruptedException, TimeoutException, ExecutionException {
-		StringContentProvider content = new StringContentProvider("<contact id=\"4\">" +
-				"<title>title4</title>" +
-				"<name>name4 lastname4</name>" +
-				"<email>444@email</email>" +
-				"<phoneNumber>4444</phoneNumber>"+
+		StringContentProvider content = new StringContentProvider("<contact id=\"5\">" +
+				"<title>title5</title>" +
+				"<name>name5 lastname5</name>" +
+				"<email>555@email</email>" +
+				"<phoneNumber>5555</phoneNumber>"+
 				"</contact>");
 		org.eclipse.jetty.client.api.Request request = client.newRequest("http://localhost:8080/contacts");
 		request.method(HttpMethod.POST);

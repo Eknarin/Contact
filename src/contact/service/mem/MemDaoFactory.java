@@ -1,8 +1,6 @@
 package contact.service.mem;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +9,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import entity.Contact;
-import entity.ContactList;
-import service.ContactDao;
-import service.DaoFactory;
+import contact.entity.Contact;
+import contact.entity.ContactList;
+import contact.service.ContactDao;
+import contact.service.DaoFactory;
 
 /**
  * Manage instances of Data Access Objects (DAO) used in the app.

@@ -1,10 +1,10 @@
-import static org.junit.Assert.*;
+package contact.service;
 
-import java.lang.Thread.State;
+import static org.junit.Assert.assertEquals;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import javax.swing.text.AbstractDocument.Content;
 import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.jetty.client.HttpClient;
@@ -12,13 +12,11 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.util.StringContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.sun.research.ws.wadl.Request;
+import contact.JettyMain;
 
-import entity.JettyMain;
 
 /**
  * J-Unit test of ContactResource.java
@@ -71,6 +69,10 @@ public class WebSericeTest {
 	 */
 	@Test
 	public void postPass() throws InterruptedException, TimeoutException, ExecutionException {
+		org.eclipse.jetty.client.api.Request request2 = client.newRequest("http://localhost:8080/contacts/4");
+		request2.method(HttpMethod.DELETE);
+		ContentResponse response2 = request2.send();
+		
 		StringContentProvider content = new StringContentProvider("<contact id=\"4\">" +
 				"<title>title4</title>" +
 				"<name>name4 lastname4</name>" +
@@ -82,6 +84,8 @@ public class WebSericeTest {
 		request.content(content, "application/xml");
 		
 		ContentResponse response = request.send();
+		
+		
 		assertEquals("201 Created", Status.CREATED.getStatusCode(), response.getStatus());		
 	}
 	
@@ -147,11 +151,22 @@ public class WebSericeTest {
 	 */
 	@Test
 	public void deletePass() throws InterruptedException, TimeoutException, ExecutionException {
-		org.eclipse.jetty.client.api.Request request = client.newRequest("http://localhost:8080/contacts/4");
-		request.method(HttpMethod.DELETE);
-		ContentResponse response = request.send();
+		StringContentProvider content = new StringContentProvider("<contact id=\"8\">" +
+				"<title>title8</title>" +
+				"<name>name4 lastname8</name>" +
+				"<email>888@email</email>" +
+				"<phoneNumber>8888</phoneNumber>"+
+				"</contact>");
+		org.eclipse.jetty.client.api.Request request = client.newRequest("http://localhost:8080/contacts");
+		request.method(HttpMethod.POST);
+		request.content(content, "application/xml");
 		
-		assertEquals("200 OK", Status.OK.getStatusCode(), response.getStatus());
+		ContentResponse response = request.send();
+		org.eclipse.jetty.client.api.Request request2 = client.newRequest("http://localhost:8080/contacts/8");
+		request.method(HttpMethod.DELETE);
+		ContentResponse response2 = request2.send();
+		
+		assertEquals("200 OK", Status.OK.getStatusCode(), response2.getStatus());
 	}
 	
 	/*

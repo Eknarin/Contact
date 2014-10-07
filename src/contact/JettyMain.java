@@ -1,19 +1,14 @@
-package entity;
+package contact;
 
-import java.io.IOException;
 
-import javax.servlet.Servlet;
 import javax.xml.bind.JAXBException;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 
-import service.DaoFactory;
-
-import greeter.resource.ContactResource;
+import contact.service.DaoFactory;
 
 /**
  * <p>
@@ -62,7 +57,7 @@ import greeter.resource.ContactResource;
  * project so Maven will manage your dependencies. 
  * 
  * @author jim
- * @modifier Eknarin Thirayothin 5510546239
+ * Eknarin Thirayothin 5510546239
  */
 public class JettyMain {
 	/** The default port to listen on. Typically 80 or 8080.  
@@ -90,7 +85,7 @@ public class JettyMain {
 		ServletContextHandler context = new ServletContextHandler( ServletContextHandler.SESSIONS );
 		context.setContextPath("/");
 		ServletHolder holder = new ServletHolder( org.glassfish.jersey.servlet.ServletContainer.class );
-		holder.setInitParameter(ServerProperties.PROVIDER_PACKAGES, "greeter.resource");
+		holder.setInitParameter(ServerProperties.PROVIDER_PACKAGES, "contact.resource");
 		context.addServlet( holder, "/*" );
 		server.setHandler( context );
 		

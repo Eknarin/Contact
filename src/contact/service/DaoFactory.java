@@ -1,11 +1,8 @@
-package service;
+package contact.service;
 
 import javax.xml.bind.JAXBException;
 
-import contact.service.jpa.JpaContactDao;
-import contact.service.jpa.JpaDaoFactory;
 import contact.service.mem.MemDaoFactory;
-import service.DaoFactory;
 
 /**
  * DaoFactory defines methods for obtaining instance of data access objects.

@@ -1,8 +1,8 @@
-package service;
+package contact.service;
 
 import java.util.List;
 
-import entity.Contact;
+import contact.entity.Contact;
 /**
  * Interface defines the operations required by 
  * a DAO for Contacts.

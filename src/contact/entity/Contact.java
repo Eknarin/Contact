@@ -1,4 +1,6 @@
-package entity;
+package contact.entity;
+
+
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
